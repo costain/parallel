@@ -10,9 +10,9 @@
 
 // Number of vertices in the graph
 
-#define g_size 4
+#define g_size 4040
 #define buffer_size 1024
-const char *filename = "t.txt";
+const char *filename = "fb.txt";
 using namespace std;
 int graph_array [g_size][g_size];
 
@@ -113,6 +113,8 @@ int main()
                     nodeY = atoi(strtok(NULL, delimiter_characters));
 
                     graph_array[nodeX][nodeY]= 1;
+                    graph_array[nodeY][nodeX]= 1;
+		    
                     last_token = strtok(NULL, delimiter_characters);
                 }
 
