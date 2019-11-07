@@ -9,9 +9,9 @@
 
 // Number of vertices in the graph
 
-#define g_size 4040
+#define g_size 5
 #define buffer_size 2024
-const char *filename = "../fb.txt";
+const char *filename = "../triangles.txt";
 using namespace std;
 int graph_array [g_size][g_size];
 

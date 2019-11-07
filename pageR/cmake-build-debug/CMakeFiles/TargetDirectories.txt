@@ -1,0 +1,3 @@
+C:/Users/March/CLionProjects/pageR/cmake-build-debug/CMakeFiles/pageR.dir
+C:/Users/March/CLionProjects/pageR/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/March/CLionProjects/pageR/cmake-build-debug/CMakeFiles/rebuild_cache.dir

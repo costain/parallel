@@ -1,0 +1,3 @@
+C:/Users/March/Desktop/git_parallel/parallel/triangle/cmake-build-debug/CMakeFiles/triangle_cpp.dir
+C:/Users/March/Desktop/git_parallel/parallel/triangle/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/March/Desktop/git_parallel/parallel/triangle/cmake-build-debug/CMakeFiles/rebuild_cache.dir
