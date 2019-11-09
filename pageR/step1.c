@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <sys/time.h>
+#include <time.h>
+#include <zconf.h>
 
 /* Step One: 
    sequential implementation of the PageRank algorithm
@@ -38,16 +39,22 @@ int main(){
         fgets(str,100-1,fp);
         //Debug: print title of the data set
         //printf("%s",str);
-        sscanf (str,"%*s %d %*s %*d", &n); 
+        //sscanf (str,"%*s %d %*s %*d", &n); 
         ch = getc(fp);
     }
     ungetc(ch, fp);
 
     // DEBUG: Print the number of nodes 
-    printf("\nNumber of nodes = %d\n",n);
+    
 
+    printf("WHAT ABOUT HERE!?");
+
+    //printf("\nNumber of nodes = %d\n",n);
+
+    printf("Did we get here?");
    	/********************** INITIALIZATION OF A **************************/
 
+    printf("Testing to see if we get here!");
     float **a = malloc(sizeof *a * n);
 	int i, j, node1, node2;
 	
