@@ -39,7 +39,7 @@
 #define g_size 6
 #define buffer_size 2024
 const char *filename = "../edge.txt";
-using namespace std;
+//using namespace std;
 int graph_array [g_size][g_size];
 
 int Read_n(int my_rank, MPI_Comm comm);
@@ -55,7 +55,32 @@ void Print_matrix(int global_mat[], int rows, int cols);
 void Print_dists(int global_dist[], int n);
 void Print_paths(int global_pred[], int n);
 
+
+
+
+
+
 int main(int argc, char **argv) {
+
+
+
+    int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
+    int my_rank, p, loc_n, n;
+    MPI_Comm comm;
+    MPI_Datatype blk_col_mpi_t;
+
+    MPI_Init(NULL, NULL);
+    comm = MPI_COMM_WORLD;
+    MPI_Comm_rank(comm, &my_rank);
+    MPI_Comm_size(comm, &p);
+    n = Read_n(my_rank, comm);
+    loc_n = n / p;
+    loc_mat = malloc(n * loc_n * sizeof(int));
+    loc_dist = malloc(loc_n * sizeof(int));
+    loc_pred = malloc(loc_n * sizeof(int));
+    blk_col_mpi_t = Build_blk_col_type(n, loc_n);
+
+
 
 /**
  * Initialize the graph array
@@ -63,8 +88,16 @@ int main(int argc, char **argv) {
  * */
 
 
-for(int u = 0; u < g_size; u++){
-        for(int v = 0; v < g_size; v++){
+int u,v;
+
+
+
+
+
+
+
+for( u = 0; u < g_size; u++){
+        for(v = 0; v < g_size; v++){
 
             if( u==v){
                 graph_array[u][v]=0;
@@ -125,21 +158,6 @@ for(int u = 0; u < g_size; u++){
 
 
 
-    int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
-    int my_rank, p, loc_n, n;
-    MPI_Comm comm;
-    MPI_Datatype blk_col_mpi_t;
-
-    MPI_Init(NULL, NULL);
-    comm = MPI_COMM_WORLD;
-    MPI_Comm_rank(comm, &my_rank);
-    MPI_Comm_size(comm, &p);
-    n = Read_n(my_rank, comm);
-    loc_n = n / p;
-    loc_mat = malloc(n * loc_n * sizeof(int));
-    loc_dist = malloc(loc_n * sizeof(int));
-    loc_pred = malloc(loc_n * sizeof(int));
-    blk_col_mpi_t = Build_blk_col_type(n, loc_n);
 
     if (my_rank == 0) {
         global_dist = malloc(n * sizeof(int));
