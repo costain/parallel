@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdio.h>
-#include <sys/time.h>
+#include <time.h>
 #include <stdlib.h>
 
 /* Step Two: 
@@ -65,6 +65,7 @@ int main(){
   int cur_row = 0;
   int i = 0;
   int j = 0;
+  int k = 0;
   // Elements for row
   int elrow = 0;
   // Cumulative numbers of elements
@@ -79,7 +80,7 @@ int main(){
 
     if (fromnode > cur_row) { // change the row
       curel = curel + elrow;
-      for (int k = cur_row + 1; k <= fromnode; k++) {
+      for (k = cur_row + 1; k <= fromnode; k++) {
         row_ptr[k] = curel;
       }
       elrow = 0;
@@ -170,7 +171,7 @@ int main(){
 
   // Set the looping condition and the number of iterations 'k'
   int looping = 1;
-  int k = 0;
+  k = 0;
   
   // Initialize new p vector
   float p_new[n];
