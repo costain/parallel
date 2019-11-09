@@ -36,6 +36,11 @@
 #include <stdlib.h>
 #include <mpi.h>
 #define INFINITY 1000000
+#define g_size 6
+#define buffer_size 2024
+const char *filename = "../edge.txt";
+using namespace std;
+int graph_array [g_size][g_size];
 
 int Read_n(int my_rank, MPI_Comm comm);
 MPI_Datatype Build_blk_col_type(int n, int loc_n);
@@ -51,6 +56,75 @@ void Print_dists(int global_dist[], int n);
 void Print_paths(int global_pred[], int n);
 
 int main(int argc, char **argv) {
+
+/**
+ * Initialize the graph array
+ *
+ * */
+
+
+for(int u = 0; u < g_size; u++){
+        for(int v = 0; v < g_size; v++){
+
+            if( u==v){
+                graph_array[u][v]=0;
+            }
+            else {
+                graph_array[u][v] = INFINITY;
+            }
+        }
+
+    }
+
+    int nodeU = -1;
+    int nodeV = -1;
+    int nodeZ = -1;
+
+    const char *delimiter_characters = " ";
+    FILE *input_file = fopen( filename, "r" );
+    char buffer[ buffer_size ];
+    char *last_token;
+    int nodes = g_size;
+
+
+    if( input_file == NULL ){
+
+        fprintf( stderr, "Unable to open file %s\n", filename );
+
+    }else {
+
+        // Read each line into the buffer
+        while (fgets(buffer, buffer_size, input_file) != NULL) {
+
+
+            last_token = strtok(buffer, delimiter_characters);
+
+            while (last_token != NULL) {
+                nodeU = atoi(last_token);
+                nodeV = atoi(strtok(NULL, delimiter_characters));
+                nodeZ = atoi(strtok(NULL, delimiter_characters));
+
+
+                graph_array[nodeU][nodeV] = nodeZ;
+                // graph_array[nodeV][nodeU] = nodeZ;
+
+
+                printf("Adding: (%d,%d, %d)\n", nodeU, nodeV,nodeZ);
+                last_token = strtok(NULL, delimiter_characters);
+            }
+
+        }
+
+        if (ferror(input_file)) {
+            perror("The following error occurred");
+        }
+
+        fclose(input_file);
+
+    }
+
+
+
     int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
     int my_rank, p, loc_n, n;
     MPI_Comm comm;
