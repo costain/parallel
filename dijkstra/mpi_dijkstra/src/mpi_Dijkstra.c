@@ -54,6 +54,9 @@ int Find_min_dist(int loc_dist[], int loc_known[], int loc_n);
 void Print_matrix(int global_mat[], int rows, int cols);
 void Print_dists(int global_dist[], int n);
 void Print_paths(int global_pred[], int n);
+
+
+
 void ourReader();
 
 void ourReader(){
@@ -104,7 +107,6 @@ int u;
 
             last_token = strtok(buffer, delimiter_characters);
 
-            while (last_token != NULL) {
                 nodeU = atoi(last_token);
                 nodeV = atoi(strtok(NULL, delimiter_characters));
                 nodeZ = atoi(strtok(NULL, delimiter_characters));
@@ -127,19 +129,17 @@ int u;
 
         fclose(input_file);
 
-Print_matrix(graph_array,g_size,g_size);
     }
 
 
-}
 
 
 
 
 int main(int argc, char **argv) {
 
-	
-    ourReader();
+
+
     int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
     int my_rank, p, loc_n, n;
     MPI_Comm comm;
@@ -156,8 +156,13 @@ int main(int argc, char **argv) {
     loc_pred = malloc(loc_n * sizeof(int));
     blk_col_mpi_t = Build_blk_col_type(n, loc_n);
 
+/**
+ * Initialize the graph array
+ *
+ * */
 
-   if (my_rank == 0) {
+
+    if (my_rank == 0) {
         global_dist = malloc(n * sizeof(int));
         global_pred = malloc(n * sizeof(int));
     }
@@ -187,6 +192,7 @@ int main(int argc, char **argv) {
 
 
 
+
 /*---------------------------------------------------------------------
  * Function:  Read_n
  * Purpose:   Read in the number of rows in the matrix on process 0
@@ -202,11 +208,13 @@ int Read_n(int my_rank, MPI_Comm comm) {
         scanf("%d", &n);
 
     MPI_Bcast(&n, 1, MPI_INT, 0, comm);
-
-
-
-
+    return n;
 }
+
+
+
+
+
 
 /*---------------------------------------------------------------------
  * Function:  Build_blk_col_type
@@ -489,10 +497,6 @@ void Print_dists(int global_dist[], int n) {
         }
     printf("\n");
 }
-
-
-
-
 
 
 /*-------------------------------------------------------------------
