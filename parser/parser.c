@@ -9,7 +9,7 @@
 #define g_size 6
 #define buffer_size 2024
 const char *filename = "../edge.txt";
-using namespace std;
+
 int graph_array [g_size * g_size ];
 #define INFINITY 10000000
 
@@ -18,9 +18,9 @@ int graph_array [g_size * g_size ];
 int printMatrix(){
     int print_count = 0;
     printf("=============\nSize of Array,%d\n\n",g_size);
-    for(int i = 0; i < g_size * g_size; i++){
+    for(int u = 0; u < g_size * g_size; u++){
 
-            printf("%d ",graph_array[i]);
+            printf("%d ",graph_array[u]);
 
 
         if (print_count == g_size - 1  ) {
