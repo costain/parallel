@@ -40,7 +40,7 @@
 #define buffer_size 2024
 const char *filename = "edge.txt";
 //using namespace std;
-int graph_array [g_size];
+int graph_array [g_size * g_size *sizeof(int)];
 
 int Read_n(int my_rank, MPI_Comm comm);
 MPI_Datatype Build_blk_col_type(int n, int loc_n);
@@ -54,13 +54,15 @@ int Find_min_dist(int loc_dist[], int loc_known[], int loc_n);
 void Print_matrix(int global_mat[], int rows, int cols);
 void Print_dists(int global_dist[], int n);
 void Print_paths(int global_pred[], int n);
-
-
-
 void ourReader();
 
+int printMatrix(int g_a []);
+//int *graph_array;
 void ourReader(){
 
+
+//graph_array  = malloc(biggy * biggy * sizeof(int));
+printf("Inside our reader ");
 int u;
 
  int count = g_size;
@@ -69,14 +71,14 @@ int u;
 
     for( u = 0; u < g_max ; u++){
 
-            prod = u * g_size + u;
+          //  prod = u * g_size + u;
  //           printf("PROD%d\n",prod);
             if( count == g_size  ){
-                graph_array[u] = 0;
+               graph_array[u] = 0;
                 count = - 1;
             }
             else {
-                graph_array[u] = INFINITY;
+               graph_array[u] = INFINITY;
 
         }
   //      printf("COunt %d: \n",count);
@@ -119,7 +121,9 @@ int u;
 
                 printf("Adding: (%d,%d, %d)\n", nodeU, nodeV,nodeZ);
                 last_token = strtok(NULL, delimiter_characters);
-            }
+        
+//	Print_matrix(graph_array,g_size,g_size);
+    }
 
         }
 
@@ -128,16 +132,35 @@ int u;
         }
 
         fclose(input_file);
-
+//	Print_matrix(graph_array,g_size,g_size);
+	printMatrix(graph_array);
     }
 
+int printMatrix(int g_a []){
+    int print_count = 0;
+    int r = 0;
+    printf("=============\nSize of Array,%d\n\n",g_size);
+    for(r = 0; r < g_size * g_size; r++){
+
+            printf("%d ",g_a[r]);
 
 
+        if (print_count == g_size - 1  ) {
+            printf("\n");
+            print_count = - 1;
+        }
+        print_count ++;
+    }
 
+    return 0;
 
+}
 
 int main(int argc, char **argv) {
+    printf("*******Main********");
+ //   sleep(2);
 
+    //Print_matrix(graph_array,g_size,g_size);
 
 
     int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
@@ -204,6 +227,7 @@ int main(int argc, char **argv) {
 int Read_n(int my_rank, MPI_Comm comm) {
     int n;
 
+       ourReader();	
     if (my_rank == 0)
         scanf("%d", &n);
 
@@ -527,6 +551,6 @@ void Print_paths(int global_pred[], int n) {
             printf("%d ", path[i]);
         printf("\n");
     }
-
+//
     free(path);
 }
