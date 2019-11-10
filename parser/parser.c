@@ -9,7 +9,7 @@
 #define g_size 6
 #define buffer_size 2024
 const char *filename = "../edge.txt";
-using namespace std;
+
 int graph_array [g_size * g_size ];
 #define INFINITY 10000000
 
