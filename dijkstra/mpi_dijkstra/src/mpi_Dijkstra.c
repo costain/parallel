@@ -54,50 +54,11 @@ int Find_min_dist(int loc_dist[], int loc_known[], int loc_n);
 void Print_matrix(int global_mat[], int rows, int cols);
 void Print_dists(int global_dist[], int n);
 void Print_paths(int global_pred[], int n);
+void ourReader();
 
+void ourReader(){
 
-
-
-
-
-int main(int argc, char **argv) {
-
-
-
-    int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
-    int my_rank, p, loc_n, n;
-    MPI_Comm comm;
-    MPI_Datatype blk_col_mpi_t;
-
-    MPI_Init(NULL, NULL);
-    comm = MPI_COMM_WORLD;
-    MPI_Comm_rank(comm, &my_rank);
-    MPI_Comm_size(comm, &p);
-    n = Read_n(my_rank, comm);
-    loc_n = n / p;
-    loc_mat = malloc(n * loc_n * sizeof(int));
-    loc_dist = malloc(loc_n * sizeof(int));
-    loc_pred = malloc(loc_n * sizeof(int));
-    blk_col_mpi_t = Build_blk_col_type(n, loc_n);
-
-
-
-/**
- * Initialize the graph array
- *
- * */
-
-
-int u,v;
-
-
-
-
-
-
-
-
-
+int u;
 
  int count = g_size;
     int g_max = g_size * g_size;
@@ -166,7 +127,39 @@ int u,v;
 
         fclose(input_file);
 
-    }   if (my_rank == 0) {
+    }
+
+
+Print_matrix(graph_array,g_size,g_size);
+
+}
+
+
+
+
+
+int main(int argc, char **argv) {
+
+	
+    ourReader();
+    int *loc_mat, *loc_dist, *loc_pred, *global_dist = NULL, *global_pred = NULL;
+    int my_rank, p, loc_n, n;
+    MPI_Comm comm;
+    MPI_Datatype blk_col_mpi_t;
+
+    MPI_Init(NULL, NULL);
+    comm = MPI_COMM_WORLD;
+    MPI_Comm_rank(comm, &my_rank);
+    MPI_Comm_size(comm, &p);
+    n = Read_n(my_rank, comm);
+    loc_n = n / p;
+    loc_mat = malloc(n * loc_n * sizeof(int));
+    loc_dist = malloc(loc_n * sizeof(int));
+    loc_pred = malloc(loc_n * sizeof(int));
+    blk_col_mpi_t = Build_blk_col_type(n, loc_n);
+
+
+   if (my_rank == 0) {
         global_dist = malloc(n * sizeof(int));
         global_pred = malloc(n * sizeof(int));
     }
@@ -212,8 +205,6 @@ int Read_n(int my_rank, MPI_Comm comm) {
         scanf("%d", &n);
 
     MPI_Bcast(&n, 1, MPI_INT, 0, comm);
-    return n;
-}
 
 
 
