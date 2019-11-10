@@ -38,9 +38,9 @@
 #define INFINITY 1000000
 #define g_size 6
 #define buffer_size 2024
-const char *filename = "../edge.txt";
+const char *filename = "edge.txt";
 //using namespace std;
-int graph_array [g_size][g_size];
+int graph_array [g_size];
 
 int Read_n(int my_rank, MPI_Comm comm);
 MPI_Datatype Build_blk_col_type(int n, int loc_n);
@@ -96,16 +96,27 @@ int u,v;
 
 
 
-for( u = 0; u < g_size; u++){
-        for(v = 0; v < g_size; v++){
 
-            if( u==v){
-                graph_array[u][v]=0;
+
+
+ int count = g_size;
+    int g_max = g_size * g_size;
+    int prod = 0;
+
+    for( u = 0; u < g_max ; u++){
+
+            prod = u * g_size + u;
+            printf("PROD%d\n",prod);
+            if( count == g_size  ){
+                graph_array[u] = 0;
+                count = - 1;
             }
             else {
-                graph_array[u][v] = INFINITY;
-            }
+                graph_array[u] = INFINITY;
+
         }
+        printf("COunt %d: \n",count);
+        count++;
 
     }
 
@@ -138,7 +149,8 @@ for( u = 0; u < g_size; u++){
                 nodeZ = atoi(strtok(NULL, delimiter_characters));
 
 
-                graph_array[nodeU][nodeV] = nodeZ;
+                graph_array[nodeU * g_size + nodeV] = nodeZ;
+                //graph_array[nodeU][nodeV] = nodeZ;
                 // graph_array[nodeV][nodeU] = nodeZ;
 
 
@@ -154,12 +166,7 @@ for( u = 0; u < g_size; u++){
 
         fclose(input_file);
 
-    }
-
-
-
-
-    if (my_rank == 0) {
+    }   if (my_rank == 0) {
         global_dist = malloc(n * sizeof(int));
         global_pred = malloc(n * sizeof(int));
     }
