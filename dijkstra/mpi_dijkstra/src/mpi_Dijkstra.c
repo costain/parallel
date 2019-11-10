@@ -106,7 +106,7 @@ int u,v;
     for( u = 0; u < g_max ; u++){
 
             prod = u * g_size + u;
-            printf("PROD%d\n",prod);
+ //           printf("PROD%d\n",prod);
             if( count == g_size  ){
                 graph_array[u] = 0;
                 count = - 1;
@@ -115,7 +115,7 @@ int u,v;
                 graph_array[u] = INFINITY;
 
         }
-        printf("COunt %d: \n",count);
+  //      printf("COunt %d: \n",count);
         count++;
 
     }
