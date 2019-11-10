@@ -127,13 +127,11 @@ int u;
 
         fclose(input_file);
 
+Print_matrix(graph_array,g_size,g_size);
     }
 
 
-Print_matrix(graph_array,g_size,g_size);
-
 }
-
 
 
 
@@ -189,7 +187,6 @@ int main(int argc, char **argv) {
 
 
 
-
 /*---------------------------------------------------------------------
  * Function:  Read_n
  * Purpose:   Read in the number of rows in the matrix on process 0
@@ -209,7 +206,7 @@ int Read_n(int my_rank, MPI_Comm comm) {
 
 
 
-
+}
 
 /*---------------------------------------------------------------------
  * Function:  Build_blk_col_type
