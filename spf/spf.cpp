@@ -5,7 +5,7 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 const int SIZE = 6; //maximum size of the graph
-char G[SIZE][SIZE]; //adjacency matrix
+int G[SIZE][SIZE]; //adjacency matrix
 bool OK[SIZE]; //nodes done
 int D[SIZE]; //distance
 int path[SIZE]; //we came to this node from
@@ -35,9 +35,9 @@ for ( u = 0; u < SIZE; u++){
 
     }
 
-    char nodeU = 'a';
-    char nodeV= 'a' ;
-    char nodeZ ='a';
+    int nodeU = -1;
+    int  nodeV= -1 ;
+    int  nodeZ =-1;
 
     const char *delimiter_characters = " ";
     FILE *input_file = fopen( filename, "r" );
@@ -58,9 +58,9 @@ for ( u = 0; u < SIZE; u++){
             last_token = strtok(buffer, delimiter_characters);
 
             while (last_token != NULL) {
-                nodeU = last_token[0];
-                nodeV = strtok(NULL, delimiter_characters)[0];
-                nodeZ = strtok(NULL, delimiter_characters)[0];
+                nodeU = atoi(last_token);
+                nodeV = atoi(strtok(NULL, delimiter_characters));
+                nodeZ = atoi(strtok(NULL, delimiter_characters));
 
                 G[nodeU][nodeV] = nodeZ;
 
@@ -139,7 +139,7 @@ main(int argc, char** argv){
   N=Read_G_Adjacency_Matrix();
   //read in the G[][]
   //set actual size
-
+  printf("We are here");
   if(id==0){
     t1=MPI_Wtime();
   }
@@ -152,7 +152,7 @@ main(int argc, char** argv){
 
     //check the results with some output from G[][] and D[]
     
-    printf("time elapsed:%d ",(t2-t1));
+    printf("time elapsed:%d \n",(t2-t1));
   }
 
   MPI_Finalize();
