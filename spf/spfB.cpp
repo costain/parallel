@@ -4,7 +4,7 @@
 //using namespace std;
 #include <stdio.h> 
 #include <stdlib.h> 
-const int SIZE = 6; //maximum size of the graph
+const int SIZE = 70; //maximum size of the graph
 int G[SIZE][SIZE]; //adjacency matrix
 int startNode = 1;
 bool OK[SIZE]; //nodes done
@@ -12,7 +12,7 @@ int D[SIZE]; //distance
 int path[SIZE]; //we came to this node from
 const int INFINITY=1000000; //big enough number, bigger than any possible path
 #define buffer_size 2024
-const char *filename = "edge.txt";
+const char *filename = "school.txt";
  
 void Print_dists(int global_dist[], int n);
 int nproc, id;
@@ -202,7 +202,7 @@ void Print_paths(int global_pred[], int n) {
             count++;
             w = global_pred[w];
         }
-        printf("0 ");
+        //printf("0 ");
         for (i = count-1; i >= 0; i--)
             printf("%d ", path[i]);
         printf("\n");
@@ -214,7 +214,7 @@ void Print_paths(int global_pred[], int n) {
 void Print_dists(int global_dist[], int n) {
     int v;
 
-    printf("  v    dist 0->v\n");
+    printf("  v    dist %d->v\n",startNode);
     printf("----   ---------\n");
 
     for (v = 1; v < n; v++) {
