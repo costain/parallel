@@ -5,7 +5,7 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 const int SIZE = 6; //maximum size of the graph
-int G[SIZE][SIZE]; //adjacency matrix
+char G[SIZE][SIZE]; //adjacency matrix
 bool OK[SIZE]; //nodes done
 int D[SIZE]; //distance
 int path[SIZE]; //we came to this node from
@@ -13,12 +13,10 @@ const int INFINITY=9999; //big enough number, bigger than any possible path
 #define buffer_size 2024
 const char *filename = "edge.txt";
  
-void Print_dists(int global_dist[], int n);
 int nproc, id;
 MPI_Status status;
 int N;
 
-void Print_paths(int global_pred[], int n);
 int Read_G_Adjacency_Matrix(){
 //actual G[][] adjacency matrix read in
  
@@ -31,15 +29,15 @@ for ( u = 0; u < SIZE; u++){
                 G[u][v]=0;
             }
             else {
-                G[u][v] = INFINITY;
+                G[u][v] = 'i';
             }
         }
 
     }
 
-    int nodeU = -1;
-    int  nodeV= -1 ;
-    int  nodeZ =-1;
+    char nodeU = 'a';
+    char nodeV= 'a' ;
+    char nodeZ ='a';
 
     const char *delimiter_characters = " ";
     FILE *input_file = fopen( filename, "r" );
@@ -60,9 +58,9 @@ for ( u = 0; u < SIZE; u++){
             last_token = strtok(buffer, delimiter_characters);
 
             while (last_token != NULL) {
-                nodeU = atoi(last_token);
-                nodeV = atoi(strtok(NULL, delimiter_characters));
-                nodeZ = atoi(strtok(NULL, delimiter_characters));
+                nodeU = last_token[0];
+                nodeV = strtok(NULL, delimiter_characters)[0];
+                nodeZ = strtok(NULL, delimiter_characters)[0];
 
                 G[nodeU][nodeV] = nodeZ;
 
@@ -139,8 +137,6 @@ main(int argc, char** argv){
   MPI_Comm_rank(MPI_COMM_WORLD, &id);     // get mynode
 
   N=Read_G_Adjacency_Matrix();
-  N= SIZE; 
- // printf("%d",N);
   //read in the G[][]
   //set actual size
   printf("We are here");
@@ -148,81 +144,16 @@ main(int argc, char** argv){
     t1=MPI_Wtime();
   }
 
-  dijk(0);
+  dijk(200);
   //call the algorithm with the choosen node
- 
 
   if(id==0){
     t2=MPI_Wtime();
 
     //check the results with some output from G[][] and D[]
     
-    printf("time elapsed:%d \n",(t2-t1));
+    printf("time elapsed:%d ",(t2-t1));
   }
 
   MPI_Finalize();
-  int p =0;
-  int r =0;
-/*  printf("D[] ARRAY\n");
-  for(p = 0; p < SIZE; p++){
-   	printf("%d ",D[p]);
-	}
-  printf("\n\n PATH\n");
-
-  for(p = 0; p < SIZE; p++){
-   	printf("%d %d\n ",p,path[p]);
-	}
-  printf("\n\n");
-  printf("G[][] ARRAY\n");
-  
-  for(p = 0; p < SIZE; p++){
-  for(r = 0; r < SIZE; r++){
-   	printf("%d ",G[p][r]);
-	} printf("\n");
-}*/
-
-  Print_dists(D,SIZE);
-  printf("\n");  
-  Print_paths(path,SIZE);  
 }
-
-void Print_paths(int global_pred[], int n) {
-    int v, w, count, i;
-    int path [SIZE];
-
-    printf("  v     Path 0->v\n");
-    printf("----    ---------\n");
-    for (v = 0; v < n; v++) {
-        printf("%3d:    ", v);
-        count = 0;
-        w = v;
-        while (w != 0) {
-            path[count] = w;
-            count++;
-            w = global_pred[w];
-        }
-        printf("0 ");
-        for (i = count-1; i >= 0; i--)
-            printf("%d ", path[i]);
-        printf("\n");
-    }
-//
-    //free(paths);
-}
-
-void Print_dists(int global_dist[], int n) {
-    int v;
-
-    printf("  v    dist 0->v\n");
-    printf("----   ---------\n");
-
-    for (v = 1; v < n; v++) {
-        if (global_dist[v] == INFINITY) {
-            printf("%3d       %5s\n", v, "inf");
-        }
-        else
-            printf("%3d       %4d\n", v, global_dist[v]);
-        }
-    printf("\n");
-}
-
