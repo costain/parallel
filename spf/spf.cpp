@@ -4,14 +4,15 @@
 //using namespace std;
 #include <stdio.h> 
 #include <stdlib.h> 
-const int SIZE = 6; //maximum size of the graph
+const int SIZE = 70; //maximum size of the graph
 int G[SIZE][SIZE]; //adjacency matrix
+int startNode = 1;
 bool OK[SIZE]; //nodes done
 int D[SIZE]; //distance
 int path[SIZE]; //we came to this node from
-const int INFINITY=9999; //big enough number, bigger than any possible path
+const int INFINITY=1000000; //big enough number, bigger than any possible path
 #define buffer_size 2024
-const char *filename = "edge.txt";
+const char *filename = "school.txt";
  
 void Print_dists(int global_dist[], int n);
 int nproc, id;
@@ -148,7 +149,7 @@ main(int argc, char** argv){
     t1=MPI_Wtime();
   }
 
-  dijk(0);
+  dijk(startNode);
   //call the algorithm with the choosen node
  
 
