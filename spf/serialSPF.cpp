@@ -14,13 +14,54 @@
 const int SIZE = 6; //maximum size of the graph
 int G[SIZE][SIZE]; //adjacency matrix
 int startNode = 0;
-bool OK[SIZE]; //nodes done
+bool visited[SIZE]; //nodes done
 int D[SIZE]; //distance
-int path[SIZE]; //we came to this node from
+int previous[SIZE]; //we came to this node from
 
 #define buffer_size 2024
 const char *filename = "edge.txt";
-void Print_paths(int global_pred[], int n);
+
+void Print_paths(int global_pred[], int n) {
+    int v, w, count, i;
+    int path [SIZE];
+
+    printf("  v     Path %d->v\n",startNode);
+    printf("----    ---------\n");
+    for (v = startNode; v < n; v++) {
+        printf("%3d:    ", v);
+        count = 0;
+        w = v;
+        while (w != 0) {
+            path[count] = w;
+            count++;
+            w = global_pred[w];
+        }
+        //printf("0 ");
+        for (i = count-1; i >= 0; i--)
+            printf("%d ", path[i]);
+        printf("\n");
+    }
+//
+    //free(paths);
+}
+
+void Print_dists(int global_dist[], int n) {
+    int v;
+
+    printf("  v    dist %d->v\n",startNode);
+    printf("----   ---------\n");
+
+    for (v = 1; v < n; v++) {
+        if (global_dist[v] == INFINITY) {
+            printf("%3d       %5s\n", v, "inf");
+        }
+        else
+            printf("%3d       %4d\n", v, global_dist[v]);
+        }
+    printf("\n");
+}
+
+
 int Read_G_Adjacency_Matrix(){
 //actual G[][] adjacency matrix read in
  
@@ -90,75 +131,52 @@ void dijkstra(int s){
   //initial values:
   for(i=0;i<SIZE;i++){
     D[i]=G[s][i];
-    OK[i]=false;
-    path[i]=s;
-  }
-  OK[s]=true;
-  path[s]=-1;
+   visited[i]=false;
+    previous[i]=s;
+  } 
+  
+  /*Print_dists(D,SIZE);
+  printf("\n");  
+  Print_paths(path,SIZE);  
+*/
+  visited[s]=true;
+  previous[s]=-1;
 
   //there are N-1 steps in the greedy algorithm:
   for(j=1;j<SIZE;j++){
-
+   printf("\n");
     //finding maimimum of D[]:
+    
+     printf("***********We are in round J: %d***********\n",j) ; 
     tmp=INFINITY;
     for(i=0;i<SIZE;i++){
-      if(!OK[i] && D[i]<tmp){
+//	printf("OK:%d -- D[i]%d\n",OK[i], D[i]);
+	 if(!visited[i] && D[i]<tmp){
         x=i;
         tmp=D[i];
-      }
+	printf("Tmp: %d\n",tmp);
+      } /*else {printf("FAILED\n");}*/
     }
-    OK[x]=true;
+    visited[x]=true;
 
     //alternating paths:
     for(i=0;i<SIZE;i++){
-      if(!OK[i] && D[i]>D[x]+G[x][i]){
-        D[i]=D[x]+G[x][i];
-        path[i]=x;
-      }
+      if(!visited[i] && D[i]>D[x]+G[x][i]){
+   
+	D[i]=D[x]+G[x][i];
+        printf("D[i]: %d\nD[x]: %d\nG[x][i]: %d\n",D[i],D[x],G[x][i]);    
+        previous[i]=x;
+	
+        printf("X= Previous[%d]: %d\n",i,x) ; 
+      } 
     }
-  }
+   /*	printf("OK:%d **********\n\n\n",OK[0]);
+   	printf("OK:%d **********\n\n\n",OK[1]);
+   	printf("OK:%d **********\n\n\n",OK[2]);
+   	printf("OK:%d **********\n\n\n",OK[3]);
+ */ }
 }
  
-
-void Print_paths(int global_pred[], int n) {
-    int v, w, count, i;
-    int path [SIZE];
-
-    printf("  v     Path %d->v\n",startNode);
-    printf("----    ---------\n");
-    for (v = startNode; v < n; v++) {
-        printf("%3d:    ", v);
-        count = 0;
-        w = v;
-        while (w != 0) {
-            path[count] = w;
-            count++;
-            w = global_pred[w];
-        }
-        //printf("0 ");
-        for (i = count-1; i >= 0; i--)
-            printf("%d ", path[i]);
-        printf("\n");
-    }
-//
-    //free(paths);
-}
-
-void Print_dists(int global_dist[], int n) {
-    int v;
-
-    printf("  v    dist %d->v\n",startNode);
-    printf("----   ---------\n");
-
-    for (v = 1; v < n; v++) {
-        if (global_dist[v] == INFINITY) {
-            printf("%3d       %5s\n", v, "inf");
-        }
-        else
-            printf("%3d       %4d\n", v, global_dist[v]);
-        }
-    printf("\n");
-}
 
 main(int argc, char** argv){
 
@@ -167,7 +185,7 @@ main(int argc, char** argv){
 
   Print_dists(D,SIZE);
   printf("\n");  
-  Print_paths(path,SIZE);  
+  Print_paths(previous,SIZE);  
 
 }
 
